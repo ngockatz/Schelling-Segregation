@@ -1,5 +1,5 @@
 
-##Original Text
+## Original Text
 from http://nifty.stanford.edu/2014/mccown-schelling-model-segregation/
 ## Overview
 
