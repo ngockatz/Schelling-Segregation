@@ -1,4 +1,4 @@
-Attribute VB_Name = "InOrder"
+'Macro for Model 2
 Option Base 1
 Option Explicit
 Declare PtrSafe Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)
@@ -7,20 +7,19 @@ Sub ColorRange()
 Dim nrows As Integer, ncols As Integer, blank As Single, red As Single, satisfy As Single
 Dim row As Integer, col As Integer, r As Single, square As Range, response As String
 Dim nblank As Integer
-'MsgBox "Form is prefilled, but feel free to change", , "For the typical lazy user"
+Dim sleeptime As Integer
 
-'Can also use public variable to avoid parsing values
-Call nbform.allValid(nrows, ncols, blank, red, satisfy)
+With nbform
+    Call .Initialize
+    .Show
+    nrows = .sbnRows.Value
+    ncols = .sbnCols.Value
+    blank = .sbBlank.Value / 100
+    red = .sbRed.Value / 100
+    satisfy = .sbSatisfy.Value / 100
+    sleeptime = .sbDelay.Value
+End With
 
-If blank + red >= 1 Then
-    MsgBox "Sum of fraction blank and red should be smaller than 1", , "Try again"
-    Call nbform.allValid(nrows, ncols, blank, red, satisfy)
-End If
-
-'unreasonable randomness
-Do While satisfy = 0 Or satisfy > 0.89 Or blank = 0 Or red = 0
-    Call nbform.allValid(nrows, ncols, blank, red, satisfy)
-Loop
 ReDim arrsquare(nrows, ncols) As String
 ReDim fractionarr(nrows, ncols) As Double
 
@@ -47,15 +46,20 @@ For row = 1 To nrows
 Next row
 
 square = arrsquare
-MsgBox "Fraction red = " & red & ", fraction blue = " & round(1 - red - blank, 2) & ", fraction blank = " & blank _
-& vbNewLine & "Next comes the similarity index part", , "Fancied input"
+
+MsgBox "Approximately = " & red * 100 & "% is red, " & round(1 - red - blank, 2) * 100 & "% is blue, " & _
+blank * 100 & "% is blank" & vbNewLine _
+& "Next take a look at the current satisfaction rate", , "Neighbor input"
 
 Call SimilarityIndex(nrows, ncols, arrsquare, fractionarr)
 
 square = fractionarr
 square.Font.Size = 11
 
-MsgBox "Now to the moving part, satisfied if cell similarity >= " & satisfy, , "Fancy fancy fancy..."
+MsgBox "Look at the calculated grid. Note that blank is arbitrarily set to 99" & vbNewLine _
+& "Now let's move dissatisfied agents to any vacant spot, keep moving until the neighbor similarity is at least " & satisfy * 100 & "%", , _
+"Moving dissatisfied folks"
+
 'Moving dissatisfied cells
 Dim allsatisfy As Boolean, blankchecked As Integer
 allsatisfy = True
@@ -94,8 +98,7 @@ For row = 1 To nrows
                     arrsquare(a, b) = "Blank"
 
                 Else
-                    'Application.Wait (Now + TimeValue("0:00:01"))
-                    Sleep 5
+                    Sleep sleeptime
                     arrsquare(row, col) = "Blank"
                     fractionarr(a, b) = cellSimilar(arrsquare, nrows, ncols, a, b)
                     Cells(a, b).Value = fractionarr(a, b)
@@ -105,11 +108,6 @@ For row = 1 To nrows
                     'unsatisfied cells now become blank
                     fractionarr(row, col) = 99
                     Cells(row, col).Clear
-                    'Cells(row, col).Value = 99
-                    'Recalculate; this does not apply when dissatisfied people must move in SAME round
-                        'Call SimilarityIndex(nrows, ncols, arrsquare, fractionarr)
-                    
-
 
                     'found 1 feasible location
                     step = 1
@@ -131,7 +129,6 @@ Next row
 
 'Recalculate similarity for next round
 Call SimilarityIndex(nrows, ncols, arrsquare, fractionarr)
-'square = fractionarr
 
 Application.ScreenUpdating = True
 
@@ -144,9 +141,12 @@ If rounds > loopbound Then
 End If
 
 Loop Until allsatisfy
-square = fractionarr
 
-MsgBox "All happy at round " & rounds & vbNewLine & "Similarity threshold was " & satisfy, , "Fancy congrats"
+MsgBox "All agents satisfied at round " & rounds & vbNewLine _
+        & "Similarity requirement was " & satisfy * 100 & "%" & vbNewLine _
+        & "Feel free to inspect the calculated grid", , "Summary"
+
+square = fractionarr
 
 End Sub
 
@@ -169,7 +169,6 @@ Sub SimilarityIndex(nrows As Integer, ncols As Integer, myArray() As String, fra
 
         If myArray(row, Column) = "Blank" Then
             fractionArray(row, Column) = 99
-            'Cells(row, Column).Value = 99
         Else
             For i = -1 To 1
                 For j = -1 To 1
@@ -221,25 +220,9 @@ Dim i As Integer, j As Integer, likecount As Integer, notlike As Integer
     Next i
     If (likecount + notlike) = 0 Then
         cellSimilar = 1
-        'fractionArray(row, Column) = 1 'all blank neighbors: 0 if dissatisfied, 1 if satisfied -> your choice
     Else
         cellSimilar = (likecount / (likecount + notlike))
-        'fractionArray(row, Column) = (likecount / (likecount + notlike))
     End If
 
 End Function
-'Unused
-Sub updateSurrounding(arrsquare() As String, fractionarr() As Double, nrows As Integer, ncols As Integer, row As Integer, col As Integer)
 
-Dim i As Integer, j As Integer
-    For i = -1 To 1
-        For j = -1 To 1
-        If row + i <= 0 Or col + j <= 0 Or row + i > nrows Or col + j > ncols Then
-            
-        Else
-            fractionarr(row + i, col + j) = cellSimilar(arrsquare, nrows, ncols, row + i, col + j)
-            Cells(row + i, col + i).Value = cellSimilar(arrsquare, nrows, ncols, row + i, col + j)
-        End If
-    Next j
-    Next i
-End Sub
