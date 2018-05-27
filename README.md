@@ -1,4 +1,3 @@
-
 ## Original Text
 from http://nifty.stanford.edu/2014/mccown-schelling-model-segregation/
 ## Overview
@@ -6,7 +5,6 @@ from http://nifty.stanford.edu/2014/mccown-schelling-model-segregation/
 Racial segregation has always been a pernicious social problem in the United States. Although much effort has been extended to desegregate schools, churches, and neighborhoods, the [US continues to remain segregated](http://tcf.org/blog/detail/racial-segregation-is-still-a-problem) by race and economic lines. Why is segregation such a difficult problem to eradicate?
 
 In 1971, the American economist [Thomas Schelling](http://en.wikipedia.org/wiki/Thomas_Schelling) created an agent-based model that might help explain why segregation is so difficult to combat. His _model of segregation_ showed that even when individuals (or "agents") didn&#39;t mind being surrounded or living by agents of a different race, they would still _choose_ to segregate themselves from other agents over time! Although the model is quite simple, it gives a fascinating look at how individuals might self-segregate, even when they have no explicit desire to do so.
-
 
 
 ## How the Model Works
