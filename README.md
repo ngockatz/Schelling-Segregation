@@ -29,14 +29,22 @@ In the image below (left), all dissatisfied agents have an asterisk next to them
 
 ![Dissatisfied agents with asterisk](http://nifty.stanford.edu/2014/mccown-schelling-model-segregation/images/grid4.png)     ![New configuration](http://nifty.stanford.edu/2014/mccown-schelling-model-segregation/images/grid5.png)
 
-All dissatisfied agents must be moved in the same _round_. After the round is complete, a new round begins, and dissatisfied agents are once again moved to new locations in the grid. These rounds continue until all agents in the neighborhood are satisfied with their location.
+_All dissatisfied agents must be moved in the same round. After the round is complete, a new round begins, and dissatisfied agents are once again moved to new locations in the grid. These rounds continue until all agents in the neighborhood are satisfied with their location._
+
+### Excel models
+- Model 1: illustrates the rule described above
+![sample](./img/excelgrid.PNG)
+Red and Blue cells represent two different agents, Blank (white) cells represent vacant space. The number in each red and blue cell is their respective neighborhood similarity, while that of blank cell is arbitrarily set to 99.
+
+- Model 2: follows the same basic rules as Schelling&#39;s model (model 1) but I propose a significant change in how the agents move: instead of moving arbitrarily to any vacant spot, _the dissatisfied agent will only move to a vacant spot where the agent is satisfied in the new place._
+This makes more sense as in real life people won&#39;t move to a neighborhood they know they won&#39;t be happy in. It also assumes people are independent of each other; they _do not move altogether at the same time_ as Schelling suggests, but in a time manner. This results in significantly fewer rounds needed to satisfy all agents.
 
 ## Getting Started
 ### Live visualization
 - Download the Excel files (&#34;Model 1.xlsm&#34; & &#34;Model 2.xlsm&#34;) and - follow the their instruction.
 - Don&#39;t forget to enable macros upon opening the files!
 
-### Code
+### Logic
 * See Random.bas (Model 1) and InOrder.bas (Model 2)
 
 ## Acknowledgements
