@@ -30,8 +30,9 @@ In the image below (left), all dissatisfied agents have an asterisk next to them
 _All dissatisfied agents must be moved in the same round. After the round is complete, a new round begins, and dissatisfied agents are once again moved to new locations in the grid. These rounds continue until all agents in the neighborhood are satisfied with their location._
 
 ### Excel models
-- Model 1: illustrates the rule described above
 ![sample](./img/excelgrid.PNG)
+
+- Model 1: illustrates the rule described above
 Red and Blue cells represent two different agents, Blank (white) cells represent vacant space. The number in each red and blue cell is their respective neighborhood similarity, while that of blank cell is arbitrarily set to 99.
 
 - Model 2: follows the same basic rules as Schelling&#39;s model (model 1) but I propose a significant change in how the agents move: instead of moving arbitrarily to any vacant spot, _the dissatisfied agent will only move to a vacant spot where the agent is satisfied in the new place._
